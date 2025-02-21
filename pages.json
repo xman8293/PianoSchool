@@ -1,0 +1,85 @@
+{
+	"pages": [ 
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "首页"
+			}
+		},
+		{
+			"path": "pages/teachers/index",
+			"style": {
+				"navigationBarTitleText": "教师团队",
+				"navigationBarBackgroundColor": "#2A3F54",
+				"navigationBarTextStyle": "white"
+			}
+		},
+		{
+			"path": "pages/events/index",
+			"style": {
+				"navigationBarTitleText": "活动中心",
+				"navigationBarBackgroundColor": "#2A3F54",
+				"navigationBarTextStyle": "white",
+				"enablePullDownRefresh": true,
+				"backgroundTextStyle": "dark"
+			}
+		},
+		{
+			"path": "pages/profile/index",
+			"style": {
+				"navigationBarTitleText": "个人中心",
+				"navigationBarBackgroundColor": "#2A3F54",
+				"navigationBarTextStyle": "white"
+			}
+		},
+		{
+			"path": "pages/teacher-detail/index",
+			"style": {
+				"navigationBarTitleText": "教师详情",
+				"navigationBarBackgroundColor": "#2A3F54",
+				"navigationBarTextStyle": "white"
+			}
+		},
+		{
+			"path": "pages/event-detail/index",
+			"style": {
+				"navigationBarTitleText": "活动详情",
+				"navigationBarBackgroundColor": "#2A3F54",
+				"navigationBarTextStyle": "white"
+			}
+		}
+	],
+	"tabBar": {
+		"color": "#999999",
+		"selectedColor": "#2A3F54",
+		"backgroundColor": "#ffffff",
+		"list": [
+			{
+				"pagePath": "pages/index/index",
+				"text": "首页"
+			},
+			{
+				"pagePath": "pages/teachers/index",
+				"text": "教师"
+			},
+			{
+				"pagePath": "pages/events/index",
+				"text": "活动"
+			},
+			{
+				"pagePath": "pages/profile/index",
+				"text": "我的"
+			}
+		]
+	},
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "音乐培训",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	},
+	"uniIdRouter": {},
+	"usingComponents": {
+		"uni-popup": "/components/uni-popup/uni-popup"
+	}
+}

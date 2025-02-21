@@ -1,0 +1,12 @@
+{
+  "scripts": {
+    "dev": "npm run clean && cross-env NODE_ENV=development UNI_PLATFORM=mp-weixin vue-cli-service uni-build --watch",
+    "build": "cross-env NODE_ENV=production UNI_PLATFORM=mp-weixin vue-cli-service uni-build",
+    "clean": "rm -rf unpackage/dist/dev/mp-weixin"
+  },
+  "dependencies": {
+    "@dcloudio/uni-app": "^3.0.0",
+    "@dcloudio/uni-app-plus": "^3.0.0",
+    "@dcloudio/uni-components": "^3.0.0"
+  }
+} 

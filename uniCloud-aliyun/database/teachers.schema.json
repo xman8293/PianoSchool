@@ -1,0 +1,35 @@
+{
+  "bsonType": "object",
+  "required": ["name", "avatar", "brief"],
+  "properties": {
+    "name": {
+      "bsonType": "string",
+      "title": "教师姓名",
+      "minLength": 2,
+      "maxLength": 10
+    },
+    "avatar": {
+      "bsonType": "string",
+      "title": "头像地址",
+      "format": "url"
+    },
+    "brief": {
+      "bsonType": "string",
+      "title": "教师简介",
+      "minLength": 10,
+      "maxLength": 200
+    },
+    "subject": {
+      "bsonType": "string",
+      "title": "教学科目",
+      "enum": ["钢琴", "小提琴", "声乐", "吉他", "其他"]
+    },
+    "createTime": {
+      "bsonType": "timestamp",
+      "title": "创建时间",
+      "defaultValue": {
+        "$env": "now"
+      }
+    }
+  }
+} 

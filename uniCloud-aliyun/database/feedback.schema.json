@@ -1,0 +1,33 @@
+{
+  "bsonType": "object",
+  "required": ["name", "contact", "content"],
+  "properties": {
+    "name": {
+      "bsonType": "string",
+      "title": "姓名",
+      "minLength": 2,
+      "maxLength": 10,
+      "errorMessage": "姓名应为2-10个字符"
+    },
+    "contact": {
+      "bsonType": "string",
+      "title": "联系方式",
+      "format": "email|phone",
+      "errorMessage": "请输入有效的手机号或邮箱"
+    },
+    "content": {
+      "bsonType": "string",
+      "title": "反馈内容",
+      "minLength": 10,
+      "maxLength": 500,
+      "errorMessage": "反馈内容需10-500个字符"
+    },
+    "create_time": {
+      "bsonType": "timestamp",
+      "title": "创建时间",
+      "defaultValue": {
+        "$env": "now"
+      }
+    }
+  }
+} 

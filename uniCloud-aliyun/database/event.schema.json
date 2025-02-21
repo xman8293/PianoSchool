@@ -1,0 +1,52 @@
+{
+  "bsonType": "object",
+  "required": ["title", "time", "image", "brief"],
+  "properties": {
+    "id": {
+      "bsonType": "int",
+      "title": "活动ID",
+      "defaultValue": 0
+    },
+    "title": {
+      "bsonType": "string",
+      "title": "活动标题",
+      "minLength": 2,
+      "maxLength": 50
+    },
+    "time": {
+      "bsonType": "string",
+      "title": "活动时间",
+      "format": "date"
+    },
+    "brief": {
+      "bsonType": "string",
+      "title": "活动简介",
+      "minLength": 10,
+      "maxLength": 200
+    },
+    "image": {
+      "bsonType": "string",
+      "title": "活动图片",
+      "format": "url"
+    },
+    "location": {
+      "bsonType": "string",
+      "title": "活动地点",
+      "minLength": 2,
+      "maxLength": 50
+    },
+    "status": {
+      "bsonType": "string",
+      "title": "活动状态",
+      "enum": ["进行中", "已结束", "未开始"]
+    },
+    "createTime": {
+      "bsonType": "timestamp",
+      "title": "创建时间",
+      "defaultValue": {
+        "$env": "now"
+      }
+    }
+  }
+} 
+

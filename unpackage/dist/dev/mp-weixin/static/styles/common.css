@@ -1,0 +1,79 @@
+/* 全局通用样式 */
+.primary-color {
+    color: #2A3F54;
+}
+
+.secondary-color {
+    color: #D4AF37;
+}
+
+.primary-bg {
+    background-color: #2A3F54;
+}
+
+.secondary-bg {
+    background-color: #D4AF37;
+}
+
+/* 新增全局背景样式 */
+page {
+  background-color: #f5f7fa;
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+}
+
+/* 卡片通用样式 */
+.card {
+    background: #ffffff;
+    border-radius: 24rpx;
+    box-shadow: 0 8rpx 30rpx rgba(0,0,0,0.05);
+    margin: 30rpx;
+    overflow: hidden;
+}
+
+/* 按钮通用样式 */
+.btn-primary {
+    background: #2A3F54;
+    color: #fff;
+    border-radius: 8rpx;
+    padding: 20rpx 40rpx;
+    text-align: center;
+}
+
+.btn-secondary {
+    background: #D4AF37;
+    color: #fff;
+    border-radius: 8rpx;
+    padding: 20rpx 40rpx;
+    text-align: center;
+}
+
+/* 所有卡片统一样式 */
+.common-card {
+  background: #ffffff;
+  border-radius: 16rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.05);
+  margin: 30rpx;
+  padding: 25rpx;
+}
+
+/* 统一标题样式 */
+.common-title {
+  font-size: 36rpx;
+  color: #2A3F54;
+  font-weight: 600;
+  margin-bottom: 30rpx;
+  position: relative;
+  padding-left: 20rpx;
+}
+
+.common-title::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6rpx;
+  height: 32rpx;
+  background: #D4AF37;
+  border-radius: 3rpx;
+} 
