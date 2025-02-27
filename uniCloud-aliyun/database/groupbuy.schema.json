@@ -1,0 +1,54 @@
+{
+  "bsonType": "object",
+  "required": ["name", "image", "currentPrice"],
+  "properties": {
+    "name": {
+      "bsonType": "string",
+      "title": "商品名称",
+      "maxLength": 50
+    },
+    "image": {
+      "bsonType": "string",
+      "title": "商品图片",
+      "format": "url"
+    },
+    "originalPrice": {
+      "bsonType": "double",
+      "title": "原价"
+    },
+    "currentPrice": {
+      "bsonType": "double",
+      "title": "现价"
+    },
+    "notice": {
+      "bsonType": "string",
+      "title": "团购须知",
+      "maxLength": 200
+    },
+    "appId": {
+      "bsonType": "string",
+      "title": "小程序ID"
+    },
+    "path": {
+      "bsonType": "string",
+      "title": "跳转路径"
+    },
+    "sort": {
+      "bsonType": "int",
+      "title": "排序",
+      "defaultValue": 0
+    },
+    "stock": {
+      "bsonType": "int",
+      "title": "库存",
+      "minimum": 0
+    },
+    "endTime": {
+      "bsonType": "timestamp",
+      "title": "活动截止时间"
+    }
+  },
+  "permission": {
+    "read": true
+  }
+} 

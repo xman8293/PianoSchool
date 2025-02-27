@@ -88,6 +88,36 @@ const looseToNumber = (val) => {
   const n2 = parseFloat(val);
   return isNaN(n2) ? val : n2;
 };
+function normalizeStyle(value) {
+  if (isArray(value)) {
+    const res = {};
+    for (let i2 = 0; i2 < value.length; i2++) {
+      const item = value[i2];
+      const normalized = isString(item) ? parseStringStyle(item) : normalizeStyle(item);
+      if (normalized) {
+        for (const key in normalized) {
+          res[key] = normalized[key];
+        }
+      }
+    }
+    return res;
+  } else if (isString(value) || isObject(value)) {
+    return value;
+  }
+}
+const listDelimiterRE = /;(?![^(]*\))/g;
+const propertyDelimiterRE = /:([^]+)/;
+const styleCommentRE = /\/\*[^]*?\*\//g;
+function parseStringStyle(cssText) {
+  const ret = {};
+  cssText.replace(styleCommentRE, "").split(listDelimiterRE).forEach((item) => {
+    if (item) {
+      const tmp = item.split(propertyDelimiterRE);
+      tmp.length > 1 && (ret[tmp[0].trim()] = tmp[1].trim());
+    }
+  });
+  return ret;
+}
 function normalizeClass(value) {
   let res = "";
   if (isString(value)) {
@@ -496,6 +526,9 @@ class EffectScope {
       this._active = false;
     }
   }
+}
+function effectScope(detached) {
+  return new EffectScope(detached);
 }
 function recordEffectScope(effect2, scope = activeEffectScope) {
   if (scope && scope.active) {
@@ -5035,6 +5068,22 @@ function getCreateApp() {
     return my[method];
   }
 }
+function stringifyStyle(value) {
+  if (isString(value)) {
+    return value;
+  }
+  return stringify(normalizeStyle(value));
+}
+function stringify(styles) {
+  let ret = "";
+  if (!styles || isString(styles)) {
+    return ret;
+  }
+  for (const key in styles) {
+    ret += `${key.startsWith(`--`) ? key : hyphenate(key)}:${styles[key]};`;
+  }
+  return ret;
+}
 function vOn(value, key) {
   const instance = getCurrentInstance();
   const ctx = instance.ctx;
@@ -5167,6 +5216,7 @@ function setRef(ref2, id, opts = {}) {
 }
 const o$1 = (value, key) => vOn(value, key);
 const f$1 = (source, renderItem) => vFor(source, renderItem);
+const s$1 = (value) => stringifyStyle(value);
 const e$1 = (target, ...sources) => extend(target, ...sources);
 const n$1 = (value) => normalizeClass(value);
 const t$1 = (val) => toDisplayString(val);
@@ -6869,7 +6919,7 @@ function initOnError() {
 function initRuntimeSocketService() {
   const hosts = "10.168.75.3,127.0.0.1";
   const port = "8090";
-  const id = "mp-weixin_F8OzsE";
+  const id = "mp-weixin_yRfFUS";
   const lazy = typeof swan !== "undefined";
   let restoreError = lazy ? () => {
   } : initOnError();
@@ -7801,17 +7851,112 @@ const createSubpackageApp = initCreateSubpackageApp();
   wx.createPluginApp = global.createPluginApp = createPluginApp;
   wx.createSubpackageApp = global.createSubpackageApp = createSubpackageApp;
 }
+var isVue2 = false;
+/*!
+ * pinia v2.1.7
+ * (c) 2023 Eduardo San Martin Morote
+ * @license MIT
+ */
+const piniaSymbol = Symbol("pinia");
+var MutationType;
+(function(MutationType2) {
+  MutationType2["direct"] = "direct";
+  MutationType2["patchObject"] = "patch object";
+  MutationType2["patchFunction"] = "patch function";
+})(MutationType || (MutationType = {}));
+const IS_CLIENT = typeof window !== "undefined";
+const USE_DEVTOOLS = IS_CLIENT;
+const componentStateTypes = [];
+const getStoreType = (id) => "🍍 " + id;
+function addStoreToDevtools(app, store) {
+  if (!componentStateTypes.includes(getStoreType(store.$id))) {
+    componentStateTypes.push(getStoreType(store.$id));
+  }
+}
+function patchActionForGrouping(store, actionNames, wrapWithProxy) {
+  const actions = actionNames.reduce((storeActions, actionName) => {
+    storeActions[actionName] = toRaw(store)[actionName];
+    return storeActions;
+  }, {});
+  for (const actionName in actions) {
+    store[actionName] = function() {
+      const trackedStore = wrapWithProxy ? new Proxy(store, {
+        get(...args) {
+          return Reflect.get(...args);
+        },
+        set(...args) {
+          return Reflect.set(...args);
+        }
+      }) : store;
+      const retValue = actions[actionName].apply(trackedStore, arguments);
+      return retValue;
+    };
+  }
+}
+function devtoolsPlugin({ app, store, options }) {
+  if (store.$id.startsWith("__hot:")) {
+    return;
+  }
+  store._isOptionsAPI = !!options.state;
+  patchActionForGrouping(store, Object.keys(options.actions), store._isOptionsAPI);
+  const originalHotUpdate = store._hotUpdate;
+  toRaw(store)._hotUpdate = function(newStore) {
+    originalHotUpdate.apply(this, arguments);
+    patchActionForGrouping(store, Object.keys(newStore._hmrPayload.actions), !!store._isOptionsAPI);
+  };
+  addStoreToDevtools(
+    app,
+    // FIXME: is there a way to allow the assignment from Store<Id, S, G, A> to StoreGeneric?
+    store
+  );
+}
+function createPinia() {
+  const scope = effectScope(true);
+  const state = scope.run(() => ref({}));
+  let _p = [];
+  let toBeInstalled = [];
+  const pinia = markRaw({
+    install(app) {
+      {
+        pinia._a = app;
+        app.provide(piniaSymbol, pinia);
+        app.config.globalProperties.$pinia = pinia;
+        toBeInstalled.forEach((plugin2) => _p.push(plugin2));
+        toBeInstalled = [];
+      }
+    },
+    use(plugin2) {
+      if (!this._a && !isVue2) {
+        toBeInstalled.push(plugin2);
+      } else {
+        _p.push(plugin2);
+      }
+      return this;
+    },
+    _p,
+    // it's actually undefined here
+    // @ts-expect-error
+    _a: null,
+    _e: scope,
+    _s: /* @__PURE__ */ new Map(),
+    state
+  });
+  if (USE_DEVTOOLS && typeof Proxy !== "undefined") {
+    pinia.use(devtoolsPlugin);
+  }
+  return pinia;
+}
 const pages = [
   {
     path: "pages/index/index",
     style: {
-      navigationBarTitleText: "首页"
+      navigationBarTitleText: "大奔儿音乐教育"
     }
   },
   {
     path: "pages/teachers/index",
     style: {
-      navigationBarTitleText: "教师团队",
+      navigationBarTitleText: "大奔儿音乐教育",
       navigationBarBackgroundColor: "#2A3F54",
       navigationBarTextStyle: "white"
     }
@@ -7819,11 +7964,12 @@ const pages = [
   {
     path: "pages/events/index",
     style: {
-      navigationBarTitleText: "活动中心",
+      navigationBarTitleText: "大奔儿音乐教育",
       navigationBarBackgroundColor: "#2A3F54",
       navigationBarTextStyle: "white",
       enablePullDownRefresh: true,
-      backgroundTextStyle: "dark"
+      backgroundTextStyle: "dark",
+      onReachBottomDistance: 50
     }
   },
   {
@@ -7835,19 +7981,29 @@ const pages = [
     }
   },
   {
-    path: "pages/teacher-detail/index",
+    path: "pages/students/index",
     style: {
-      navigationBarTitleText: "教师详情",
+      navigationBarTitleText: "优秀学员"
+    }
+  },
+  {
+    path: "pages/certificates/index",
+    style: {
+      navigationBarTitleText: "证书展示",
       navigationBarBackgroundColor: "#2A3F54",
       navigationBarTextStyle: "white"
     }
   },
   {
-    path: "pages/event-detail/index",
+    path: "pages/groupbuy/index",
     style: {
-      navigationBarTitleText: "活动详情",
-      navigationBarBackgroundColor: "#2A3F54",
-      navigationBarTextStyle: "white"
+      navigationBarTitleText: "大奔儿音乐教育"
+    }
+  },
+  {
+    path: "pages/contact/form",
+    style: {
+      navigationBarTitleText: "大奔儿音乐教育"
     }
   }
 ];
@@ -7857,39 +8013,50 @@ const tabBar = {
   backgroundColor: "#ffffff",
   list: [
     {
+      text: "首页",
       pagePath: "pages/index/index",
-      text: "首页"
+      iconPath: "static/home.png",
+      selectedIconPath: "static/home.png"
     },
     {
+      text: "教师团队",
       pagePath: "pages/teachers/index",
-      text: "教师"
+      iconPath: "static/teacher.png",
+      selectedIconPath: "static/teacher.png"
     },
     {
-      pagePath: "pages/events/index",
-      text: "活动"
+      text: "团购活动",
+      pagePath: "pages/groupbuy/index",
+      iconPath: "static/group.png",
+      selectedIconPath: "static/group.png"
     },
     {
-      pagePath: "pages/profile/index",
-      text: "我的"
+      text: "联系我们",
+      pagePath: "pages/contact/form",
+      iconPath: "static/contact.png",
+      selectedIconPath: "static/contact.png"
     }
   ]
 };
 const globalStyle = {
   navigationBarTextStyle: "black",
-  navigationBarTitleText: "音乐培训",
+  navigationBarTitleText: "大奔儿音乐教育",
   navigationBarBackgroundColor: "#F8F8F8",
   backgroundColor: "#F8F8F8"
 };
 const uniIdRouter = {};
-const usingComponents = {
-  "uni-popup": "/components/uni-popup/uni-popup"
+const usingComponents = {};
+const easycom = {
+  autoscan: true,
+  custom: {}
 };
 const e = {
   pages,
   tabBar,
   globalStyle,
   uniIdRouter,
-  usingComponents
+  usingComponents,
+  easycom
 };
 var define_process_env_UNI_SECURE_NETWORK_CONFIG_default = [];
 function t(e2) {
@@ -10738,6 +10905,7 @@ const onReachBottom = /* @__PURE__ */ createHook(ON_REACH_BOTTOM);
 const onPullDownRefresh = /* @__PURE__ */ createHook(ON_PULL_DOWN_REFRESH);
 exports._export_sfc = _export_sfc;
 exports.computed = computed;
+exports.createPinia = createPinia;
 exports.createSSRApp = createSSRApp;
 exports.e = e$1;
 exports.er = er;
@@ -10752,6 +10920,9 @@ exports.onReachBottom = onReachBottom;
 exports.p = p$1;
 exports.ref = ref;
 exports.resolveComponent = resolveComponent;
+exports.s = s$1;
 exports.sr = sr;
 exports.t = t$1;
+exports.unref = unref;
+exports.wx$1 = wx$1;
 //# sourceMappingURL=../../.sourcemap/mp-weixin/common/vendor.js.map

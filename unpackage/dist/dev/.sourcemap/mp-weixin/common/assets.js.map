@@ -1,1 +1,1 @@
-{"version":3,"file":"assets.js","sources":["../../static/empty.png"],"sourcesContent":["export default \"/static/empty.png\""],"names":[],"mappings":";AAAA,MAAe,aAAA;;"}
+{"version":3,"file":"assets.js","sources":["static/logo.png","../../static/empty.png"],"sourcesContent":["export default \"__VITE_ASSET__c20ac95e__\"","export default \"/static/empty.png\""],"names":[],"mappings":";AAAA,MAAe,eAAA;ACAf,MAAe,aAAA;;;"}

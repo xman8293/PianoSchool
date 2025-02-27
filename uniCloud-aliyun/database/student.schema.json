@@ -1,0 +1,32 @@
+{
+  "bsonType": "object",
+  "required": ["name", "avatar"],
+  "properties": {
+    "name": {
+      "bsonType": "string",
+      "title": "姓名",
+      "maxLength": 20
+    },
+    "avatar": {
+      "bsonType": "string",
+      "title": "头像",
+      "format": "url"
+    },
+    "intro": {
+      "bsonType": "string",
+      "title": "简介",
+      "maxLength": 100
+    },
+    "achievement": {
+      "bsonType": "string",
+      "title": "成就",
+      "maxLength": 100
+    },
+    "honor": {
+      "bsonType": "string",
+      "title": "荣誉",
+      "maxLength": 100
+    }
+
+  }
+} 

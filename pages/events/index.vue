@@ -2,7 +2,6 @@
   <view class="page-container">
     <view class="event-list">
       <view v-if="eventList.length === 0 && !loading" class="empty-tips">
-        <image src="/static/empty.png" class="empty-image"/>
         <text class="empty-text">暂无活动数据</text>
       </view>
 
@@ -13,7 +12,7 @@
         @click="navigateToDetail(item.id)"
       >
         <image 
-          :src="item.image" 
+          :src="item.cover" 
           mode="aspectFill" 
           class="event-image"
         />
@@ -24,7 +23,7 @@
               :class="['event-status', getStatusClass(item.status)]"
               v-if="item.status !== '进行中'"
             >
-              {{ item.status }}
+              {{ getStatusText(item.status) }}
             </text>
           </view>
           <view class="event-meta">
@@ -39,8 +38,7 @@
 
       <!-- 加载状态提示 -->
       <view class="loading-text">
-        <text v-if="loading">加载中...</text>
-        <text v-if="noMore" class="no-more">没有更多了~</text>
+        <text v-if="loading">加载中...</text>        
       </view>
     </view>
   </view>
@@ -68,7 +66,8 @@ const fetchEvents = async (page = 1) => {
     const res = await Promise.race([
       uniCloud.callFunction({
         name: 'getEvents',
-        data: { page, pageSize: 10 }
+        data: { page, pageSize: 10 },
+        timeout: 10000
       }),
       new Promise((_, reject) => 
         setTimeout(() => reject(new Error('请求超时')), 10000)
@@ -81,17 +80,21 @@ const fetchEvents = async (page = 1) => {
         : [...eventList.value, ...res.result.data.list]
       total.value = res.result.data.total
       noMore.value = !res.result.data.hasMore
+    } else {
+      throw new Error(res.result.message)
     }
 
-    // 在 fetchEvents 函数中检查是否有本地缓存读取
-    const cacheData = uni.getStorageSync('eventCache')
-    if (cacheData) {
-      eventList.value = cacheData
-    }
+  
   } catch (error) {
     uni.showToast({
-      title: error.message || '加载失败',
-      icon: 'none'
+      title: error.errMsg || error.message,
+      icon: 'none',
+      duration: 3000
+    })
+    console.error('完整错误信息:', {
+      code: error.errCode,
+      message: error.errMsg,
+      detail: error
     })
   } finally {
     loading.value = false
@@ -99,16 +102,35 @@ const fetchEvents = async (page = 1) => {
 }
 
 // 状态样式
+const getStatusText = (status) => {
+	switch (status) {
+		case 'ongoing':
+			return '进行中'
+		case 'upcoming':
+			return '即将开始'
+		case 'ended':
+			return '已结束'
+		default:
+			return ''
+	}
+}
 const getStatusClass = (status) => {
-  return {
-    '已结束': 'ended',
-    '未开始': 'upcoming'
-  }[status] || ''
+	switch (status) {
+		case 'ongoing':
+			return 'ongoing'
+		case 'upcoming':
+			return 'upcoming'
+		case 'ended':
+			return 'ended'
+		default:
+			return ''
+	}
 }
 
 // 页面生命周期
 onMounted(() => {
-  console.log('Build Timestamp:', process.env.UNI_BUILD_TIME)
+  console.log(uni.getSystemInfoSync().SDKVersion) // 获取小程序基础库版本
+  console.log(__wxConfig.envVersion) // 获取环境版本
   fetchEvents()
 })
 
@@ -145,6 +167,13 @@ const loadMoreEvents = async () => {
   } finally {
     loading.value = false
   }
+}
+
+// 添加错误追踪
+if (typeof console.trace === 'function') {
+  console.trace('当前堆栈信息')
+} else {
+  console.log('当前环境不支持console.trace')
 }
 </script>
 
@@ -257,11 +286,6 @@ const loadMoreEvents = async () => {
 .empty-tips {
   text-align: center;
   padding: 40rpx;
-}
-.empty-image {
-  width: 200rpx;
-  height: 200rpx;
-  opacity: 0.6;
 }
 .empty-text {
   display: block;

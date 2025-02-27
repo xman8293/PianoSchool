@@ -1,0 +1,38 @@
+{
+  "bsonType": "object",
+  "required": ["name", "avatar"],
+  "properties": {
+    "name": {
+      "bsonType": "string",
+      "title": "姓名",
+      "maxLength": 20
+    },
+    "avatar": {
+      "bsonType": "string",
+      "title": "头像",
+      "format": "url"
+    },
+    "intro": {
+      "bsonType": "string",
+      "title": "简介",
+      "maxLength": 200
+    },
+    "sort": {
+      "bsonType": "int",
+      "title": "排序",
+      "defaultValue": 0,
+      "minimum": 0,
+      "maximum": 9999
+    },
+    "create_time": {
+      "bsonType": "timestamp",
+      "title": "创建时间",
+      "defaultValue": {
+        "$env": "now"
+      }
+    }
+  },
+  "permission": {
+    "read": "auth.uid != null"
+  }
+} 

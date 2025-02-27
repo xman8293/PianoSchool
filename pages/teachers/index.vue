@@ -16,13 +16,17 @@
             <image 
               :src="founder.avatar" 
               class="founder-image" 
-              mode="aspectFit"
+              mode="aspectFill"
+              style="border-radius: 12rpx"
               @tap="showImage(founder.avatar)"
             />
           </view>
           <view class="founder-info">
-            <text class="founder-name">{{founder.name}}</text>
-            <text class="founder-position">{{founder.position}}</text>
+            <view class="founder-header">
+              <text class="founder-name">{{founder.name}}</text>
+              <view class="founder-position-tag">{{founder.position}}</view>
+            </view>
+            <view class="divider"></view>
             <text class="founder-brief">{{founder.brief}}</text>
           </view>
         </view>
@@ -46,12 +50,20 @@
               :src="teacher.avatar" 
               class="teacher-image" 
               mode="aspectFit"
+              style="border-radius: 16rpx"
             />
           </view>
           <view class="teacher-info">
-            <text class="teacher-name">{{teacher.name}}</text>
-            <text class="teacher-subject">{{teacher.subject}}</text>
+            <view class="name-wrapper">
+              <text class="teacher-name">{{teacher.name}}</text>
+              <view class="teacher-subject-tag">{{teacher.subject}}</view>
+            </view>
             <text class="teacher-brief">{{teacher.brief}}</text>
+            <view class="teacher-expertise">
+              <text v-for="(tag, index) in teacher.tags" :key="index" class="tag">
+                #{{tag}}
+              </text>
+            </view>
           </view>
         </view>
       </view>
@@ -207,10 +219,10 @@ const hideImage = () => {
 
 .founder-image-wrapper {
   width: 100%;
-  height: 480rpx;
-  padding: 20rpx;
+  height: 420rpx;
+  padding: 15rpx;
   background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
-  border-radius: 24rpx;
+  border-radius: 16rpx;
   position: relative;
   overflow: hidden;
   box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.1);
@@ -225,27 +237,47 @@ const hideImage = () => {
 }
 
 .founder-info {
-  padding: 25rpx;
+  padding: 20rpx 25rpx;
   background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(245,247,250,0.5));
   border-radius: 0 0 20rpx 20rpx;
 }
 
-.founder-name {
-  font-size: 40rpx;
-  color: #2A3F54;
-  text-shadow: 0 2rpx 4rpx rgba(0,0,0,0.1);
+.founder-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+  flex-wrap: wrap;
+  gap: 15rpx;
 }
 
-.founder-position {
-  font-size: 30rpx;
+.founder-name {
+  font-size: 44rpx;
+  color: #2A3F54;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.founder-position-tag {
+  background: rgba(212,175,55,0.1);
   color: #D4AF37;
-  font-weight: 500;
+  font-size: 28rpx;
+  padding: 8rpx 20rpx;
+  border-radius: 8rpx;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.divider {
+  height: 1px;
+  background: rgba(42,63,84,0.1);
+  margin: 20rpx 0;
 }
 
 .founder-brief {
-  font-size: 28rpx;
-  color: #666;
-  line-height: 1.6;
+  font-size: 30rpx;
+  color: rgba(42,63,84,0.8);
+  line-height: 1.8;
+  margin-top: 15rpx;
 }
 
 /* 教师列表样式 */
@@ -265,12 +297,15 @@ const hideImage = () => {
 
 .teacher-card {
   background: #fff;
-  border-radius: 20rpx;
+  border-radius: 24rpx;
   overflow: hidden;
-  padding: 12rpx;
-  box-shadow: 0 8rpx 25rpx rgba(42,63,84,0.06);
-  border: 1rpx solid rgba(212,175,55,0.1);
-  transition: all 0.3s ease;
+  box-shadow: 0 8rpx 24rpx rgba(42,63,84,0.08);
+  margin-bottom: 20rpx;
+  transition: transform 0.3s ease;
+}
+
+.teacher-card:active {
+  transform: scale(0.98);
 }
 
 .teacher-image-wrapper {
@@ -278,46 +313,75 @@ const hideImage = () => {
   height: 360rpx;
   padding: 15rpx;
   background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
-  border-radius: 16rpx;
-  position: relative;
+  border-radius: 24rpx 24rpx 0 0;
   overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .teacher-image {
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  border: 2rpx solid rgba(42,63,84,0.1);
-  border-radius: 12rpx;
+  object-fit: cover;
+  border-radius: 20rpx 20rpx 0 0;
+  object-position: center center;
+  width: 95%;
+  height: 95%;
   transition: all 0.3s ease;
-  background: linear-gradient(to bottom right, rgba(255,255,255,0.9), rgba(255,255,255,0.5));
 }
 
 .teacher-info {
-  padding: 25rpx;
+  padding: 20rpx;
   background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(245,247,250,0.5));
   border-radius: 0 0 20rpx 20rpx;
 }
 
-.teacher-name {
-  font-size: 32rpx;
-  font-weight: 600;
-  color: #2A3F54;
-  margin-bottom: 20rpx;
+.name-wrapper {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15rpx;
 }
 
-.teacher-subject {
-  font-size: 26rpx;
+.teacher-name {
+  font-size: 36rpx;
+  color: #2A3F54;
+  font-weight: 600;
+  margin-right: 20rpx;
+}
+
+.teacher-subject-tag {
+  background: #f0f2f5;
   color: #666;
-  margin-bottom: 20rpx;
-  display: block;
+  font-size: 26rpx;
+  padding: 8rpx 20rpx;
+  border-radius: 8rpx;
 }
 
 .teacher-brief {
-  font-size: 26rpx;
+  font-size: 28rpx;
   color: #666;
-  line-height: 1.8;
-  margin-top: 15rpx;
+  line-height: 1.5;
+  margin-bottom: 20rpx;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+
+.teacher-expertise {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15rpx;
+}
+
+.tag {
+  background: #2A3F54;
+  color: #fff;
+  font-size: 22rpx;
+  padding: 6rpx 16rpx;
+  border-radius: 30rpx;
+  line-height: 1.4;
 }
 
 .loading-text {

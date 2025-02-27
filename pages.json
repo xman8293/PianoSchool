@@ -3,13 +3,13 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "首页"
+				"navigationBarTitleText": "大奔儿音乐教育"
 			}
 		},
 		{
 			"path": "pages/teachers/index",
 			"style": {
-				"navigationBarTitleText": "教师团队",
+				"navigationBarTitleText": "大奔儿音乐教育",
 				"navigationBarBackgroundColor": "#2A3F54",
 				"navigationBarTextStyle": "white"
 			}
@@ -17,11 +17,12 @@
 		{
 			"path": "pages/events/index",
 			"style": {
-				"navigationBarTitleText": "活动中心",
+				"navigationBarTitleText": "大奔儿音乐教育",
 				"navigationBarBackgroundColor": "#2A3F54",
 				"navigationBarTextStyle": "white",
 				"enablePullDownRefresh": true,
-				"backgroundTextStyle": "dark"
+				"backgroundTextStyle": "dark",
+				"onReachBottomDistance": 50
 			}
 		},
 		{
@@ -33,20 +34,24 @@
 			}
 		},
 		{
-			"path": "pages/teacher-detail/index",
+			"path": "pages/students/index",
+			"style": { "navigationBarTitleText": "优秀学员" }
+		},
+		{
+			"path": "pages/certificates/index",
 			"style": {
-				"navigationBarTitleText": "教师详情",
+				"navigationBarTitleText": "证书展示",
 				"navigationBarBackgroundColor": "#2A3F54",
 				"navigationBarTextStyle": "white"
 			}
 		},
 		{
-			"path": "pages/event-detail/index",
-			"style": {
-				"navigationBarTitleText": "活动详情",
-				"navigationBarBackgroundColor": "#2A3F54",
-				"navigationBarTextStyle": "white"
-			}
+			"path": "pages/groupbuy/index",
+			"style": { "navigationBarTitleText": "大奔儿音乐教育" }
+		},
+		{
+			"path": "pages/contact/form",
+			"style": { "navigationBarTitleText": "大奔儿音乐教育" }
 		}
 	],
 	"tabBar": {
@@ -55,31 +60,45 @@
 		"backgroundColor": "#ffffff",
 		"list": [
 			{
+				"text": "首页",
 				"pagePath": "pages/index/index",
-				"text": "首页"
+				"iconPath": "static/home.png",
+				"selectedIconPath": "static/home.png"
 			},
 			{
+				"text": "教师团队",
 				"pagePath": "pages/teachers/index",
-				"text": "教师"
+				"iconPath": "static/teacher.png",
+				"selectedIconPath": "static/teacher.png"
 			},
 			{
-				"pagePath": "pages/events/index",
-				"text": "活动"
+				"text": "团购活动",
+				"pagePath": "pages/groupbuy/index",
+				"iconPath": "static/group.png",
+				"selectedIconPath": "static/group.png"
 			},
 			{
-				"pagePath": "pages/profile/index",
-				"text": "我的"
+				"text": "联系我们",
+				"pagePath": "pages/contact/form",
+				"iconPath": "static/contact.png",
+				"selectedIconPath": "static/contact.png"
 			}
 		]
 	},
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "音乐培训",
+		"navigationBarTitleText": "大奔儿音乐教育",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8"
 	},
 	"uniIdRouter": {},
 	"usingComponents": {
-		"uni-popup": "/components/uni-popup/uni-popup"
+		
+	},
+	"easycom": {
+		"autoscan": true,
+		"custom": {
+			
+		}
 	}
 }

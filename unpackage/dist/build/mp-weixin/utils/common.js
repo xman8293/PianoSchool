@@ -1,0 +1,1 @@
+"use strict";exports.formatPrice=t=>Number(t).toFixed(2),exports.formatTime=t=>{const e=new Date(t);return`${e.getMonth()+1}月${e.getDate()}日 ${e.getHours()}:${e.getMinutes().toString().padStart(2,"0")}`};

@@ -1,0 +1,6 @@
+// 如果使用模块化store可添加
+import { useUserStore } from './user'
+
+export {
+  useUserStore
+} 

@@ -43,7 +43,7 @@ const _sfc_main = {
         });
         teacherList.value = res.result.data;
       } catch (e) {
-        common_vendor.index.__f__("error", "at pages/teachers/index.vue:119", "获取教师数据失败:", e);
+        common_vendor.index.__f__("error", "at pages/teachers/index.vue:131", "获取教师数据失败:", e);
         common_vendor.index.showToast({ title: "数据加载失败", icon: "none" });
       } finally {
         loading.value = false;
@@ -80,7 +80,13 @@ const _sfc_main = {
             c: common_vendor.t(teacher.name),
             d: common_vendor.t(teacher.subject),
             e: common_vendor.t(teacher.brief),
-            f: teacher._id
+            f: common_vendor.f(teacher.tags, (tag, index, i1) => {
+              return {
+                a: common_vendor.t(tag),
+                b: index
+              };
+            }),
+            g: teacher._id
           };
         }),
         c: loading.value

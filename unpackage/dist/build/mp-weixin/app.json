@@ -1,0 +1,54 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/teachers/index",
+    "pages/events/index",
+    "pages/profile/index",
+    "pages/students/index",
+    "pages/certificates/index",
+    "pages/groupbuy/index",
+    "pages/contact/form"
+  ],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "大奔儿音乐教育",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#F8F8F8"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#2A3F54",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "text": "首页",
+        "pagePath": "pages/index/index",
+        "iconPath": "static/home.png",
+        "selectedIconPath": "static/home.png"
+      },
+      {
+        "text": "教师团队",
+        "pagePath": "pages/teachers/index",
+        "iconPath": "static/teacher.png",
+        "selectedIconPath": "static/teacher.png"
+      },
+      {
+        "text": "团购活动",
+        "pagePath": "pages/groupbuy/index",
+        "iconPath": "static/group.png",
+        "selectedIconPath": "static/group.png"
+      },
+      {
+        "text": "联系我们",
+        "pagePath": "pages/contact/form",
+        "iconPath": "static/contact.png",
+        "selectedIconPath": "static/contact.png"
+      }
+    ]
+  },
+  "lazyCodeLoading": "requiredComponents",
+  "navigateToMiniProgramAppIdList": [
+    "wxde8ac0a21135c07d"
+  ],
+  "usingComponents": {}
+}

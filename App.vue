@@ -2,6 +2,7 @@
 	export default {
 		onLaunch: function() {
 			console.log('App Launch')
+			console.log('当前基础库版本:', wx.getSystemInfoSync().SDKVersion)
 		},
 		onShow: function() {
 			console.log('App Show')
