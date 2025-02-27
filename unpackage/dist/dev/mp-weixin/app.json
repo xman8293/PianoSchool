@@ -47,5 +47,8 @@
     ]
   },
   "lazyCodeLoading": "requiredComponents",
+  "navigateToMiniProgramAppIdList": [
+    "wxde8ac0a21135c07d"
+  ],
   "usingComponents": {}
 }
